@@ -1,0 +1,14 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+runcmd:
+  - curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/neo4j.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable latest" | sudo tee /etc/apt/sources.list.d/neo4j.list
+  - apt update
+  - apt install -y neo4j
+  - systemctl enable neo4j
+  - systemctl start neo4j
+  - echo "dbms.default_listen_address=0.0.0.0" >> /etc/neo4j/neo4j.conf
+  - echo "dbms.connector.bolt.listen_address=0.0.0.0:7687" >> /etc/neo4j/neo4j.conf
+  - echo "dbms.connector.http.listen_address=0.0.0.0:7474" >> /etc/neo4j/neo4j.conf
+  - systemctl restart neo4j

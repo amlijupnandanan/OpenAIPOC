@@ -1,0 +1,14 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - docker.io
+  - docker-compose
+
+runcmd:
+  - systemctl start docker
+  - systemctl enable docker
+  - docker pull qdrant/qdrant
+  - docker run -d --name qdrant -p 6333:6333 -p 6334:6334 qdrant/qdrant
+
+final_message: "Qdrant installation completed. Accessible at port 6333."
